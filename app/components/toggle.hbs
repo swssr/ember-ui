@@ -1,3 +1,6 @@
-<button {{on 'click' (fn this.toggleArchived @data @id)}}>
+<button
+  data-test-toggle-archived
+  {{on 'click' (fn this.toggleArchived @data @id)}}
+>
   {{if @data.archived 'Unarchive' 'Archive'}}
 </button>
