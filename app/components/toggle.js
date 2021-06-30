@@ -12,9 +12,8 @@ export default class ToggleComponent extends Component {
 
   @action
   toggleArchived(record, id) {
-    //Convert ember object to js and update
-    // debugger
     const _user = record.serialize().data.attributes;
+
     const payload = {
       ..._user,
       attributes: {
@@ -28,6 +27,7 @@ export default class ToggleComponent extends Component {
     } user`;
 
     if (!window.confirm(message)) return;
+
     fetch(`/api/users/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
