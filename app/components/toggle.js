@@ -12,38 +12,31 @@ export default class ToggleComponent extends Component {
 
   @action
   toggleArchived(record, id) {
-    //Convert ember object to js and update
-    // debugger
     const _user = record.serialize().data.attributes;
-    const payload = {
-      ..._user,
-      attributes: {
-        ..._user.attributes,
-        archived: !_user.attributes?.archived,
-      },
-    };
 
     const message = `Confirm to ${
       !_user.archived ? 'Archive' : 'Unarchive'
     } user`;
 
     if (!window.confirm(message)) return;
-    fetch(`/api/users/${id}`, {
+
+    this.updateUser(id, _user).then(() => {
+      record.set('archived', !_user.archived);
+    });
+  }
+
+  async updateUser(id, user) {
+    const headers = {
       method: 'PATCH',
-      body: JSON.stringify(payload),
+      body: JSON.stringify(user),
       headers: {
         'content-type': 'application/json',
       },
-    })
-      .then(() => {
-        record.set('archived', !_user.archived);
-      })
-      .catch((error) => {
-        console.log('@@@ Error ==> ' + error);
-      });
-  }
+    };
 
-  stringify(data = {}) {
-    return JSON.stringify(data);
+    const promise = await fetch(`/api/users/${id}`, headers);
+    const data = promise.json();
+
+    return data;
   }
 }

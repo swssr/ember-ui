@@ -26,7 +26,7 @@ module.exports = function (app) {
       return isUpdateTarget ? updatedUser : user;
     });
 
-    res.status(200).send('update successful');
+    res.status(200).json({ message: 'update successful' });
   });
 
   /*
